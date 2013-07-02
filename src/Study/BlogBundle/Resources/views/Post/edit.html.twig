@@ -1,0 +1,15 @@
+{% extends "StudyBlogBundle::layout.html.twig" %}
+{% block title %} Edit Post {% endblock %}
+{% block main_content %}
+	{{ form_start(form) }}
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.blog) }}
+		{{ form_row(form.shortDescription) }}
+		{{ form_row(form.fullDescription) }}
+		{{ form_row(form.viewed) }}
+		<div class="feature_img"><img style="width: 200px; height: 200px;" src="{{ asset(sPathImg) }}" /></div>
+		{{ form_row(form.file) }}
+	{{ form_end(form) }}
+{% endblock %}

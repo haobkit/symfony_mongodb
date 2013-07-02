@@ -1,0 +1,17 @@
+{% extends "StudyBlogBundle::layout.html.twig" %}
+
+{% block main_content %}
+	<h1>Blog Page</h1>
+	<a href="{{ path('study_add_blog') }}" class="add_blog btn btn-success">Add Blog</a>
+	<ul class="list_blog">
+		{% for oBlog in aBlogs %}
+			<li>
+				<h2>{{ oBlog.title }}</h2>
+				<p>{{ oBlog.createdDate.date|date() }}</p>
+				<p>{{ oBlog.updatedDate.date|date() }}</p>
+				<a href="{{ path('study_edit_blog',{'id': oBlog.id}) }}" class="edit_blog btn btn-primary">Edit</a>
+				<a href="{{ path('study_delete_blog',{'id': oBlog.id}) }}" class="delete_blog btn btn-danger">Delete</a>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

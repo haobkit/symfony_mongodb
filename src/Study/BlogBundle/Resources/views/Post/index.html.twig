@@ -1,0 +1,20 @@
+{% extends "StudyBlogBundle::layout.html.twig" %}
+{% block title %} Post {% endblock %}
+{% block main_content %}
+	<h1>Post Page</h1>
+	<a href="{{ path('study_add_post') }}" class="add_blog btn btn-success">Add Post</a>
+	<ul class="list_post">
+		{% for oPost in aPosts %}
+			<li>
+				<h2>{{ oPost.title }}</h2>
+				{% if oPost.blog is not null %}
+					<p>Blog: {{ oPost.blog.title }}</p>
+				{% endif %}
+				<p>Created Date: {{ oPost.createdDate.date|date() }}</p>
+				<p>Updated Date: {{ oPost.updatedDate.date|date() }}</p>
+				<a href="{{ path('study_edit_post',{'id': oPost.id}) }}" class="edit_blog btn btn-primary">Edit</a>
+				<a href="{{ path('study_delete_post',{'id': oPost.id}) }}" class="delete_blog btn btn-danger">Delete</a>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

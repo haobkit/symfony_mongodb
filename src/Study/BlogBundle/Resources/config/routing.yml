@@ -1,0 +1,53 @@
+study_add_blog:
+    pattern:  /blog/add
+    defaults: { _controller: StudyBlogBundle:Blog:create }
+
+study_edit_blog:
+    pattern:  /blog/edit/{id}
+    defaults: { _controller: StudyBlogBundle:Blog:edit }
+
+study_delete_blog:
+    pattern:  /blog/delete/{id}
+    defaults: { _controller: StudyBlogBundle:Blog:delete }
+    
+study_home_blog:
+    pattern:  /blog
+    defaults: { _controller: StudyBlogBundle:Blog:index }
+
+study_add_post:
+    pattern:  /post/add
+    defaults: { _controller: StudyBlogBundle:Post:create }
+
+study_edit_post:
+    pattern:  /post/edit/{id}
+    defaults: { _controller: StudyBlogBundle:Post:edit }
+
+study_delete_post:
+    pattern:  /post/delete/{id}
+    defaults: { _controller: StudyBlogBundle:Post:delete }
+    
+study_home_post:
+    pattern:  /post
+    defaults: { _controller: StudyBlogBundle:Post:index }
+
+study_add_user:
+    pattern:  /user/add
+    defaults: { _controller: StudyBlogBundle:User:create }
+
+study_edit_user:
+    pattern:  /user/edit/{id}
+    defaults: { _controller: StudyBlogBundle:User:edit }
+
+study_delete_user:
+    pattern:  /user/delete/{id}
+    defaults: { _controller: StudyBlogBundle:User:delete }
+    
+study_home_user:
+    pattern:  /user
+    defaults: { _controller: StudyBlogBundle:User:index }
+
+login:
+    pattern:   /login
+    defaults:  { _controller: StudyBlogBundle:Security:login }
+login_check_admin:
+    pattern:   /login_check
