@@ -16,10 +16,10 @@ security:
             form_login:
                 check_path: /login_check
                 login_path: /login
-                default_target_path: /
+                default_target_path: /post
             logout:
                 path:   /logout
-                target: /
+                target: /post
                 invalidate_session: false
             anonymous:    true
             remember_me:

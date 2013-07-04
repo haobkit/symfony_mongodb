@@ -49,6 +49,25 @@
 <body>
 
         <div class="container">
+			<div class="navbar navbar-inverse">
+				<div class="navbar-inner">
+					<div class="nav-collapse collapse">
+						<ul class="nav">
+							<li class="active"><a href="{{ app.request.getBaseURL() }}">Home</a></li>
+							<li><a href="{{ path('study_home_blog') }}">Blog</a></li>
+							<li><a href="{{ path('study_home_post') }}">Post</a></li>
+							<li><a href="{{ path('study_home_user') }}">User</a></li>
+							{% if app.user %}
+									<li><a href="{{ path('study_edit_user',{'id': app.user.id}) }}">Username: {{ app.user.username }}</a></li>
+									<li><a href="{{ path('study_logout') }}">Logout</a></li>
+							{% else %}
+									<li><a href="{{ path('study_login') }}">Login</a></li>
+							{% endif %}
+
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div>
+			</div>
 			{% if app.session.getFlashBag().has( 'success' ) %}
 					<div class="alert alert-success">
 						<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>

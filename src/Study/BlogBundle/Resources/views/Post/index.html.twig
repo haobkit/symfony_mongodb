@@ -13,6 +13,8 @@
 				<p>Created Date: {{ oPost.createdDate.date|date() }}</p>
 				<p>Updated Date: {{ oPost.updatedDate.date|date() }}</p>
 				<a href="{{ path('study_edit_post',{'id': oPost.id}) }}" class="edit_blog btn btn-primary">Edit</a>
+				<a href="{{ path('study_add_comment',{'idPost': oPost.id}) }}" class="add_comment btn btn-info">Add Comment</a>
+				<a href="{{ path('study_home_comment',{'idPost': oPost.id}) }}" class="list_comment btn btn-info">List Comment</a>
 				<a href="{{ path('study_delete_post',{'id': oPost.id}) }}" class="delete_blog btn btn-danger">Delete</a>
 			</li>
 		{% endfor %}

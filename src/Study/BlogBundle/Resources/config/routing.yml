@@ -46,8 +46,28 @@ study_home_user:
     pattern:  /user
     defaults: { _controller: StudyBlogBundle:User:index }
 
-login:
+study_login:
     pattern:   /login
     defaults:  { _controller: StudyBlogBundle:Security:login }
-login_check_admin:
+    
+study_login_check:
     pattern:   /login_check
+    
+study_logout:
+    path:   /logout
+    
+study_add_comment:
+    pattern:  /post/{idPost}/comment/add
+    defaults: { _controller: StudyBlogBundle:Comment:create }
+
+study_edit_comment:
+    pattern:  /post/{idPost}/comment/edit/{idComment}
+    defaults: { _controller: StudyBlogBundle:Comment:edit }
+
+study_delete_comment:
+    pattern:  /post/{idPost}/comment/delete/{idComment}
+    defaults: { _controller: StudyBlogBundle:Comment:delete }
+    
+study_home_comment:
+    pattern:  /post/{idPost}/comment
+    defaults: { _controller: StudyBlogBundle:Comment:index }

@@ -5,6 +5,7 @@ namespace Study\BlogBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @MongoDB\Document(repositoryClass="Study\BlogBundle\Repository\PostRepository")
@@ -76,6 +77,11 @@ class Post
 	protected $updatedDate;
 	
 	/**
+	 * @MongoDB\EmbedMany(targetDocument="Comment")
+	 */
+	protected $comment;
+	
+	/**
 	 * Saving $postImage temporary 
 	 * @var type String
 	 */
@@ -88,6 +94,7 @@ class Post
 	public function __construct() {
 		$this->setCreatedDate(new \DateTime('now'));
 		$this->setUpdatedDate(new \DateTime('now'));
+		$this->comments = new ArrayCollection();
 	}
 	
     /**
@@ -432,4 +439,5 @@ class Post
 		// When displaying uploaded doc/image in the view
 		return 'uploads/postImages';
 	}
+
 }
