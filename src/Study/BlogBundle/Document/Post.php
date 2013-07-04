@@ -5,7 +5,7 @@ namespace Study\BlogBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Doctrine\Common\Collections\ArrayCollection;
+//use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @MongoDB\Document(repositoryClass="Study\BlogBundle\Repository\PostRepository")
@@ -79,7 +79,7 @@ class Post
 	/**
 	 * @MongoDB\EmbedMany(targetDocument="Comment")
 	 */
-	protected $comment;
+	protected $comments = array();
 	
 	/**
 	 * Saving $postImage temporary 
@@ -94,7 +94,7 @@ class Post
 	public function __construct() {
 		$this->setCreatedDate(new \DateTime('now'));
 		$this->setUpdatedDate(new \DateTime('now'));
-		$this->comments = new ArrayCollection();
+		//$this->comment = new ArrayCollection();
 	}
 	
     /**
@@ -440,33 +440,92 @@ class Post
 		return 'uploads/postImages';
 	}
 
+
     /**
-     * Add comment
+     * Add comments
      *
-     * @param Study\BlogBundle\Document\Comment $comment
+     * @param Study\BlogBundle\Document\Comment $comments
      */
-    public function addComment(\Study\BlogBundle\Document\Comment $comment)
+    public function addComment(\Study\BlogBundle\Document\Comment $comments)
     {
-        $this->comment[] = $comment;
+        $this->comments[] = $comments;
     }
 
     /**
-     * Remove comment
+     * Remove comments
      *
-     * @param Study\BlogBundle\Document\Comment $comment
+     * @param Study\BlogBundle\Document\Comment $comments
      */
-    public function removeComment(\Study\BlogBundle\Document\Comment $comment)
+    public function removeComment(\Study\BlogBundle\Document\Comment $comments)
     {
-        $this->comment->removeElement($comment);
+        $this->comments->removeElement($comments);
     }
 
     /**
-     * Get comment
+     * Get comments
      *
-     * @return Doctrine\Common\Collections\Collection $comment
+     * @return Doctrine\Common\Collections\Collection $comments
      */
-    public function getComment()
+    public function getComments()
     {
-        return $this->comment;
+        return $this->comments;
     }
+	/**
+	 * Get A Comment of Post by Comment ID
+	 * @param type $idComment
+	 * @return type object Comment
+	 * @author Harrison<harrison@likipe.se>
+	 */
+	public function getAComment($idComment)
+	{
+		$aComments = $this->getComments();
+		$oComment = null;
+		if(!empty($aComments))
+		{
+			foreach ($aComments as $oItem)
+			{
+				if($oItem->getId() == $idComment) {
+					$oComment = $oItem;
+					break;
+				}
+			}
+		}
+		return $oComment;
+	}
+	
+	/**
+	 * Edit a Comment
+	 * @param type $oComment 
+	 * @author Harrison <harrison@likipe.se>
+	 */
+	public function editAComment($oComment) {
+		$aComments = $this->getComments();
+		if(!empty($aComments)) {
+			foreach ($aComments as $skey => $oItem) {
+				if($oItem->getId() == $oComment->getId()) {
+					$aComments[$skey] = $oComment;
+					return;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Delete a Comment
+	 * @param type $idComment
+	 * @author Harrison
+	 */
+	public function deleteAComment($idComment) {
+		$aComments = $this->getComments();
+		if(!empty($aComments))
+		{
+			foreach ($aComments as $skey => $oItem)
+			{
+				if($oItem->getId() == $idComment) {
+					unset($aComments[$skey]);
+					return;
+				}
+			}
+		}
+	}
 }

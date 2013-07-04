@@ -79,7 +79,7 @@ class Post
 	/**
 	 * @MongoDB\EmbedMany(targetDocument="Comment")
 	 */
-	protected $comment;
+	protected $comments = array();
 	
 	/**
 	 * Saving $postImage temporary 
@@ -94,7 +94,7 @@ class Post
 	public function __construct() {
 		$this->setCreatedDate(new \DateTime('now'));
 		$this->setUpdatedDate(new \DateTime('now'));
-		$this->comments = new ArrayCollection();
+		//$this->comment = new ArrayCollection();
 	}
 	
     /**
