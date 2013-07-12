@@ -215,10 +215,46 @@ class Post extends \Study\BlogBundle\Document\Post implements \Doctrine\ODM\Mong
         return parent::getWebPath();
     }
 
+    public function addComment(\Study\BlogBundle\Document\Comment $comments)
+    {
+        $this->__load();
+        return parent::addComment($comments);
+    }
+
+    public function removeComment(\Study\BlogBundle\Document\Comment $comments)
+    {
+        $this->__load();
+        return parent::removeComment($comments);
+    }
+
+    public function getComments()
+    {
+        $this->__load();
+        return parent::getComments();
+    }
+
+    public function getAComment($idComment)
+    {
+        $this->__load();
+        return parent::getAComment($idComment);
+    }
+
+    public function editAComment($oComment)
+    {
+        $this->__load();
+        return parent::editAComment($oComment);
+    }
+
+    public function deleteAComment($idComment)
+    {
+        $this->__load();
+        return parent::deleteAComment($idComment);
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'blog', 'title', 'shortDescription', 'fullDescription', 'viewed', 'author', 'postImage', 'createdDate', 'updatedDate');
+        return array('__isInitialized__', 'id', 'blog', 'title', 'shortDescription', 'fullDescription', 'viewed', 'author', 'postImage', 'createdDate', 'updatedDate', 'comments');
     }
 
     public function __clone()

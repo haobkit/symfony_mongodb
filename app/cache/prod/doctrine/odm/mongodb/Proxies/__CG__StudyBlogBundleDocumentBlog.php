@@ -119,6 +119,12 @@ class Blog extends \Study\BlogBundle\Document\Blog implements \Doctrine\ODM\Mong
         return parent::prePersist();
     }
 
+    public function preUpdate()
+    {
+        $this->__load();
+        return parent::preUpdate();
+    }
+
     public function addPost(\Study\BlogBundle\Document\Blog $posts)
     {
         $this->__load();

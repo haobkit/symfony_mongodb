@@ -1,0 +1,16 @@
+/* 
+    Document   : main
+    Created on : Jul 8, 2013, 4:17:26 PM
+    Author     : Harrison
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body {
+  padding-bottom: 40px;
+}
+
+.sidebar-nav {
+  padding: 9px 0;
+}
+

@@ -10,10 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BlogController extends Controller
 {
-    public function indexAction()
+    public function indexAction($page)
     {
 		$repository = $this->get('doctrine_mongodb')->getRepository('StudyBlogBundle:Blog');
-		$aBlogs = $repository->findAllQueryBuilder();
+		$aBlogs = $repository->findBy(array('deleted' => false), array('updatedDate', 'ASC'), 2, 2 * ($page-1));
+		//$aBlogs = $repository->findAllQueryBuilder();
 		//$aTestFilter = array('hao', 'hoang', 'hieu', 'hau');
 		//var_dump($blogs);
         return $this->render('StudyBlogBundle:Blog:index.html.twig', array(

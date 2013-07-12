@@ -74,22 +74,66 @@ class appProdUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirecta
         if (0 === strpos($pathinfo, '/user')) {
             // study_add_user
             if ($pathinfo === '/user/add') {
-                return array (  '_controller' => 'StudyBlogBundle:User:create',  '_route' => 'study_add_user',);
+                return array (  '_controller' => 'Study\\BlogBundle\\Controller\\UserController::createAction',  '_route' => 'study_add_user',);
             }
 
             // study_edit_user
             if (0 === strpos($pathinfo, '/user/edit') && preg_match('#^/user/edit/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_edit_user')), array (  '_controller' => 'StudyBlogBundle:User:edit',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_edit_user')), array (  '_controller' => 'Study\\BlogBundle\\Controller\\UserController::editAction',));
             }
 
             // study_delete_user
             if (0 === strpos($pathinfo, '/user/delete') && preg_match('#^/user/delete/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_delete_user')), array (  '_controller' => 'StudyBlogBundle:User:delete',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_delete_user')), array (  '_controller' => 'Study\\BlogBundle\\Controller\\UserController::deleteAction',));
             }
 
             // study_home_user
             if ($pathinfo === '/user') {
-                return array (  '_controller' => 'StudyBlogBundle:User:index',  '_route' => 'study_home_user',);
+                return array (  '_controller' => 'Study\\BlogBundle\\Controller\\UserController::indexAction',  '_route' => 'study_home_user',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/log')) {
+            if (0 === strpos($pathinfo, '/login')) {
+                // study_login
+                if ($pathinfo === '/login') {
+                    return array (  '_controller' => 'Study\\BlogBundle\\Controller\\SecurityController::loginAction',  '_route' => 'study_login',);
+                }
+
+                // study_login_check
+                if ($pathinfo === '/login_check') {
+                    return array('_route' => 'study_login_check');
+                }
+
+            }
+
+            // study_logout
+            if ($pathinfo === '/logout') {
+                return array('_route' => 'study_logout');
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/post')) {
+            // study_add_comment
+            if (preg_match('#^/post/(?P<idPost>[^/]++)/comment/add$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_add_comment')), array (  '_controller' => 'Study\\BlogBundle\\Controller\\CommentController::createAction',));
+            }
+
+            // study_edit_comment
+            if (preg_match('#^/post/(?P<idPost>[^/]++)/comment/edit/(?P<idComment>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_edit_comment')), array (  '_controller' => 'Study\\BlogBundle\\Controller\\CommentController::editAction',));
+            }
+
+            // study_delete_comment
+            if (preg_match('#^/post/(?P<idPost>[^/]++)/comment/delete/(?P<idComment>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_delete_comment')), array (  '_controller' => 'Study\\BlogBundle\\Controller\\CommentController::deleteAction',));
+            }
+
+            // study_home_comment
+            if (preg_match('#^/post/(?P<idPost>[^/]++)/comment$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'study_home_comment')), array (  '_controller' => 'Study\\BlogBundle\\Controller\\CommentController::indexAction',));
             }
 
         }

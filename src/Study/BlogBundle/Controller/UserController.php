@@ -30,7 +30,19 @@ class UserController extends Controller
 			$dm = $this->get('doctrine_mongodb')->getManager();
 			$dm->persist($oUser);
 			$dm->flush();
-
+			
+			$message = \Swift_Message::newInstance()
+					->setSubject('Hello Email')
+					->setFrom('admin@localhost.com')
+					->setTo('hao@localhost.com')
+					->setBody(
+					$this->renderView(
+							'StudyBlogBundle:Mail:email.txt.twig',
+							array('name' => $oUser->getPassword())
+							)
+					)
+			;
+			$this->get('mailer')->send($message);
 			return $this->redirect($this->generateUrl('study_home_user'));
 		}
 

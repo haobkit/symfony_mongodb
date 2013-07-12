@@ -1,3 +1,9 @@
+study_home_blog:
+    pattern:  /blog/{page}
+    defaults: { _controller: StudyBlogBundle:Blog:index, page: 1 }
+    requirements:
+      page: \d+
+    
 study_add_blog:
     pattern:  /blog/add
     defaults: { _controller: StudyBlogBundle:Blog:create }
@@ -9,10 +15,6 @@ study_edit_blog:
 study_delete_blog:
     pattern:  /blog/delete/{id}
     defaults: { _controller: StudyBlogBundle:Blog:delete }
-    
-study_home_blog:
-    pattern:  /blog
-    defaults: { _controller: StudyBlogBundle:Blog:index }
 
 study_add_post:
     pattern:  /post/add

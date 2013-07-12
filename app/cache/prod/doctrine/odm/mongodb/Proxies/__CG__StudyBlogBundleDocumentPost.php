@@ -149,10 +149,112 @@ class Post extends \Study\BlogBundle\Document\Post implements \Doctrine\ODM\Mong
         return parent::getBlog();
     }
 
+    public function prePersist()
+    {
+        $this->__load();
+        return parent::prePersist();
+    }
+
+    public function preUpdate()
+    {
+        $this->__load();
+        return parent::preUpdate();
+    }
+
+    public function preUpload()
+    {
+        $this->__load();
+        return parent::preUpload();
+    }
+
+    public function upload()
+    {
+        $this->__load();
+        return parent::upload();
+    }
+
+    public function removeUpload()
+    {
+        $this->__load();
+        return parent::removeUpload();
+    }
+
+    public function setPostImage($postImage)
+    {
+        $this->__load();
+        return parent::setPostImage($postImage);
+    }
+
+    public function getPostImage()
+    {
+        $this->__load();
+        return parent::getPostImage();
+    }
+
+    public function setFile(\Symfony\Component\HttpFoundation\File\UploadedFile $file = NULL)
+    {
+        $this->__load();
+        return parent::setFile($file);
+    }
+
+    public function getFile()
+    {
+        $this->__load();
+        return parent::getFile();
+    }
+
+    public function getAbsolutePath()
+    {
+        $this->__load();
+        return parent::getAbsolutePath();
+    }
+
+    public function getWebPath()
+    {
+        $this->__load();
+        return parent::getWebPath();
+    }
+
+    public function addComment(\Study\BlogBundle\Document\Comment $comments)
+    {
+        $this->__load();
+        return parent::addComment($comments);
+    }
+
+    public function removeComment(\Study\BlogBundle\Document\Comment $comments)
+    {
+        $this->__load();
+        return parent::removeComment($comments);
+    }
+
+    public function getComments()
+    {
+        $this->__load();
+        return parent::getComments();
+    }
+
+    public function getAComment($idComment)
+    {
+        $this->__load();
+        return parent::getAComment($idComment);
+    }
+
+    public function editAComment($oComment)
+    {
+        $this->__load();
+        return parent::editAComment($oComment);
+    }
+
+    public function deleteAComment($idComment)
+    {
+        $this->__load();
+        return parent::deleteAComment($idComment);
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'blog', 'title', 'shortDescription', 'fullDescription', 'viewed', 'author', 'createdDate', 'updatedDate');
+        return array('__isInitialized__', 'id', 'blog', 'title', 'shortDescription', 'fullDescription', 'viewed', 'author', 'postImage', 'createdDate', 'updatedDate', 'comments');
     }
 
     public function __clone()

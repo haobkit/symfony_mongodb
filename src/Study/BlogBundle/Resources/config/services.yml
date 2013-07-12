@@ -5,3 +5,9 @@ services:
 #    study_blog.example:
 #        class: %study_blog.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    study_blog_user.password_resetting:
+      class: Study\BlogBundle\EventListener\PasswordResettingListener
+      arguments: ["@router"]
+      tags:
+        - { name: kernel.event_subscriber }
+      

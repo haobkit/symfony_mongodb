@@ -115,6 +115,18 @@ class StudyBlogBundleDocumentPostHydrator implements HydratorInterface
             $this->class->reflFields['updatedDate']->setValue($document, clone $return);
             $hydratedData['updatedDate'] = $return;
         }
+
+        /** @Many */
+        $mongoData = isset($data['comments']) ? $data['comments'] : null;
+        $return = new \Doctrine\ODM\MongoDB\PersistentCollection(new \Doctrine\Common\Collections\ArrayCollection(), $this->dm, $this->unitOfWork, '$');
+        $return->setHints($hints);
+        $return->setOwner($document, $this->class->fieldMappings['comments']);
+        $return->setInitialized(false);
+        if ($mongoData) {
+            $return->setMongoData($mongoData);
+        }
+        $this->class->reflFields['comments']->setValue($document, $return);
+        $hydratedData['comments'] = $return;
         return $hydratedData;
     }
 }
