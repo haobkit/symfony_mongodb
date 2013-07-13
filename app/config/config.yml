@@ -83,3 +83,6 @@ fos_user:
     db_driver: mongodb
     firewall_name: main
     user_class: Study\BlogBundle\Document\Member
+    registration:
+      form:
+        type: study_user_registration

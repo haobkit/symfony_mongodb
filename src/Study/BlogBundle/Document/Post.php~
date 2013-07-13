@@ -5,7 +5,7 @@ namespace Study\BlogBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Doctrine\Common\Collections\ArrayCollection;
+//use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @MongoDB\Document(repositoryClass="Study\BlogBundle\Repository\PostRepository")
@@ -440,4 +440,92 @@ class Post
 		return 'uploads/postImages';
 	}
 
+
+    /**
+     * Add comments
+     *
+     * @param Study\BlogBundle\Document\Comment $comments
+     */
+    public function addComment(\Study\BlogBundle\Document\Comment $comments)
+    {
+        $this->comments[] = $comments;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param Study\BlogBundle\Document\Comment $comments
+     */
+    public function removeComment(\Study\BlogBundle\Document\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return Doctrine\Common\Collections\Collection $comments
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+	/**
+	 * Get A Comment of Post by Comment ID
+	 * @param type $idComment
+	 * @return type object Comment
+	 * @author Harrison<harrison@likipe.se>
+	 */
+	public function getAComment($idComment)
+	{
+		$aComments = $this->getComments();
+		$oComment = null;
+		if(!empty($aComments))
+		{
+			foreach ($aComments as $oItem)
+			{
+				if($oItem->getId() == $idComment) {
+					$oComment = $oItem;
+					break;
+				}
+			}
+		}
+		return $oComment;
+	}
+	
+	/**
+	 * Edit a Comment
+	 * @param type $oComment 
+	 * @author Harrison <harrison@likipe.se>
+	 */
+	public function editAComment($oComment) {
+		$aComments = $this->getComments();
+		if(!empty($aComments)) {
+			foreach ($aComments as $skey => $oItem) {
+				if($oItem->getId() == $oComment->getId()) {
+					$aComments[$skey] = $oComment;
+					return;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Delete a Comment
+	 * @param type $idComment
+	 * @author Harrison
+	 */
+	public function deleteAComment($idComment) {
+		$aComments = $this->getComments();
+		if(!empty($aComments))
+		{
+			foreach ($aComments as $skey => $oItem)
+			{
+				if($oItem->getId() == $idComment) {
+					unset($aComments[$skey]);
+					return;
+				}
+			}
+		}
+	}
 }

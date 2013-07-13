@@ -24,7 +24,7 @@ security:
             anonymous:    true
             
         backend:
-            pattern: ^/.*
+            pattern: ^/admin/*
             provider: my_mongo_provider
             form_login:
                 check_path: /login_check
@@ -44,7 +44,7 @@ security:
 
     access_control:
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/user, role: ROLE_ADMIN }
+        #- { path: ^/user, role: ROLE_ADMIN }
         - { path: ^/backend/post/add, roles: ROLE_EDITOR }
         - { path: ^/backend/post/edit/*, roles: ROLE_EDITOR }
         - { path: ^/admin, roles: ROLE_ADMIN }

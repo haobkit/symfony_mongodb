@@ -213,6 +213,7 @@ class appDevDebugProjectContainer extends Container
             'session_listener' => 'getSessionListenerService',
             'streamed_response_listener' => 'getStreamedResponseListenerService',
             'study_blog_user.password_resetting' => 'getStudyBlogUser_PasswordResettingService',
+            'study_user.registration.form.type' => 'getStudyUser_Registration_Form_TypeService',
             'swiftmailer.plugin.messagelogger' => 'getSwiftmailer_Plugin_MessageloggerService',
             'swiftmailer.transport' => 'getSwiftmailer_TransportService',
             'templating' => 'getTemplatingService',
@@ -742,25 +743,30 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getDoctrineMongodb_Odm_DefaultConfigurationService()
     {
-        $a = new \Doctrine\Common\Cache\ArrayCache();
-        $a->setNamespace('sf2mongodb_default_b441dcf017a6f163b8e3f3f2e622ad1d');
+        $a = $this->get('annotation_reader');
 
-        $b = new \Doctrine\Bundle\MongoDBBundle\Mapping\Driver\XmlDriver(array('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\doctrine' => 'FOS\\UserBundle\\Document'));
-        $b->setGlobalBasename('mapping');
+        $b = new \Doctrine\Common\Cache\ArrayCache();
+        $b->setNamespace('sf2mongodb_default_b441dcf017a6f163b8e3f3f2e622ad1d');
 
-        $c = new \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain();
-        $c->addDriver(new \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver($this->get('annotation_reader'), array(0 => 'D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\src\\Study\\BlogBundle\\Document')), 'Study\\BlogBundle\\Document');
-        $c->addDriver($b, 'FOS\\UserBundle\\Document');
-        $c->addDriver(new \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver(new \Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator(array('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\doctrine\\model' => 'FOS\\UserBundle\\Model'), '.mongodb.xml')), 'FOS\\UserBundle\\Model');
+        $c = new \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver($a, array(0 => 'D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\src\\Study\\BlogBundle\\Document', 1 => 'D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\src\\Study\\UserBundle\\Document'));
 
-        $d = new \Doctrine\Bundle\MongoDBBundle\Logger\Logger($this->get('monolog.logger.doctrine', ContainerInterface::NULL_ON_INVALID_REFERENCE));
-        $d->setBatchInsertThreshold(4);
+        $d = new \Doctrine\Bundle\MongoDBBundle\Mapping\Driver\XmlDriver(array('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\doctrine' => 'FOS\\UserBundle\\Document'));
+        $d->setGlobalBasename('mapping');
+
+        $e = new \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain();
+        $e->addDriver($c, 'Study\\BlogBundle\\Document');
+        $e->addDriver($c, 'Study\\UserBundle\\Document');
+        $e->addDriver($d, 'FOS\\UserBundle\\Document');
+        $e->addDriver(new \Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver(new \Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator(array('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\doctrine\\model' => 'FOS\\UserBundle\\Model'), '.mongodb.xml')), 'FOS\\UserBundle\\Model');
+
+        $f = new \Doctrine\Bundle\MongoDBBundle\Logger\Logger($this->get('monolog.logger.doctrine', ContainerInterface::NULL_ON_INVALID_REFERENCE));
+        $f->setBatchInsertThreshold(4);
 
         $this->services['doctrine_mongodb.odm.default_configuration'] = $instance = new \Doctrine\ODM\MongoDB\Configuration();
 
-        $instance->setDocumentNamespaces(array('StudyBlogBundle' => 'Study\\BlogBundle\\Document', 'FOSUserBundle' => 'FOS\\UserBundle\\Document'));
-        $instance->setMetadataCacheImpl($a);
-        $instance->setMetadataDriverImpl($c);
+        $instance->setDocumentNamespaces(array('StudyBlogBundle' => 'Study\\BlogBundle\\Document', 'FOSUserBundle' => 'FOS\\UserBundle\\Document', 'StudyUserBundle' => 'Study\\UserBundle\\Document'));
+        $instance->setMetadataCacheImpl($b);
+        $instance->setMetadataDriverImpl($e);
         $instance->setProxyDir('D:/xampp/htdocs/symfony_project/symfony_mongodb/app/cache/dev/doctrine/odm/mongodb/Proxies');
         $instance->setProxyNamespace('MongoDBODMProxies');
         $instance->setAutoGenerateProxyClasses(false);
@@ -771,7 +777,7 @@ class appDevDebugProjectContainer extends Container
         $instance->setDefaultCommitOptions(array('safe' => true, 'fsync' => false, 'timeout' => 30000));
         $instance->setRetryConnect(0);
         $instance->setRetryQuery(0);
-        $instance->setLoggerCallable(array(0 => new \Doctrine\Bundle\MongoDBBundle\Logger\AggregateLogger(array(0 => $d, 1 => $this->get('doctrine_mongodb.odm.data_collector.pretty'))), 1 => 'logQuery'));
+        $instance->setLoggerCallable(array(0 => new \Doctrine\Bundle\MongoDBBundle\Logger\AggregateLogger(array(0 => $f, 1 => $this->get('doctrine_mongodb.odm.data_collector.pretty'))), 1 => 'logQuery'));
 
         return $instance;
     }
@@ -1020,7 +1026,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_RegistryService()
     {
-        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'search' => 'form.type.search', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'button' => 'form.type.button', 'submit' => 'form.type.submit', 'reset' => 'form.type.reset', 'currency' => 'form.type.currency', 'entity' => 'form.type.entity', 'document' => 'form.type.mongodb_document', 'fos_user_username' => 'fos_user.username_form_type', 'fos_user_profile' => 'fos_user.profile.form.type', 'fos_user_registration' => 'fos_user.registration.form.type', 'fos_user_change_password' => 'fos_user.change_password.form.type', 'fos_user_resetting' => 'fos_user.resetting.form.type'), array('form' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf'), 'repeated' => array(0 => 'form.type_extension.repeated.validator'), 'submit' => array(0 => 'form.type_extension.submit.validator')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine', 2 => 'form.type_guesser.doctrine.mongodb'))), $this->get('form.resolved_type_factory'));
+        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'search' => 'form.type.search', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'button' => 'form.type.button', 'submit' => 'form.type.submit', 'reset' => 'form.type.reset', 'currency' => 'form.type.currency', 'entity' => 'form.type.entity', 'document' => 'form.type.mongodb_document', 'study_user_registration' => 'study_user.registration.form.type', 'fos_user_username' => 'fos_user.username_form_type', 'fos_user_profile' => 'fos_user.profile.form.type', 'fos_user_registration' => 'fos_user.registration.form.type', 'fos_user_change_password' => 'fos_user.change_password.form.type', 'fos_user_resetting' => 'fos_user.resetting.form.type'), array('form' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf'), 'repeated' => array(0 => 'form.type_extension.repeated.validator'), 'submit' => array(0 => 'form.type_extension.submit.validator')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine', 2 => 'form.type_guesser.doctrine.mongodb'))), $this->get('form.resolved_type_factory'));
     }
 
     /**
@@ -1670,7 +1676,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getFosUser_Registration_Form_FactoryService()
     {
-        return $this->services['fos_user.registration.form.factory'] = new \FOS\UserBundle\Form\Factory\FormFactory($this->get('form.factory'), 'fos_user_registration_form', 'fos_user_registration', array(0 => 'Registration', 1 => 'Default'));
+        return $this->services['fos_user.registration.form.factory'] = new \FOS\UserBundle\Form\Factory\FormFactory($this->get('form.factory'), 'fos_user_registration_form', 'study_user_registration', array(0 => 'Registration', 1 => 'Default'));
     }
 
     /**
@@ -2368,7 +2374,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_FirewallService()
     {
-        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.main' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/'), 'security.firewall.map.context.backend' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/.*'))), $this->get('event_dispatcher'));
+        return $this->services['security.firewall'] = new \Symfony\Component\Security\Http\Firewall(new \Symfony\Bundle\SecurityBundle\Security\FirewallMap($this, array('security.firewall.map.context.main' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/'), 'security.firewall.map.context.backend' => new \Symfony\Component\HttpFoundation\RequestMatcher('^/admin/*'))), $this->get('event_dispatcher'));
     }
 
     /**
@@ -2400,7 +2406,7 @@ class appDevDebugProjectContainer extends Container
         $k = new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($a, $g, $this->get('security.authentication.session_strategy'), $e, 'backend', $j, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($f, $e, array('login_path' => '/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $c), array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $c, $d);
         $k->setRememberMeServices($h);
 
-        return $this->services['security.firewall.map.context.backend'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($a, array(0 => $b, 1 => $this->get('fos_user.user_provider.username')), 'backend', $c, $d), 2 => $i, 3 => $k, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($a, $h, $g, $c, $d), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($a, '51de8b91c8e5f', $c), 6 => $this->get('security.access_listener')), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($a, $this->get('security.authentication.trust_resolver'), $e, 'backend', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($f, $e, '/login', false), NULL, NULL, $c));
+        return $this->services['security.firewall.map.context.backend'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($a, array(0 => $b, 1 => $this->get('fos_user.user_provider.username')), 'backend', $c, $d), 2 => $i, 3 => $k, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($a, $h, $g, $c, $d), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($a, '51e0c88ea4795', $c), 6 => $this->get('security.access_listener')), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($a, $this->get('security.authentication.trust_resolver'), $e, 'backend', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($f, $e, '/login', false), NULL, NULL, $c));
     }
 
     /**
@@ -2425,7 +2431,7 @@ class appDevDebugProjectContainer extends Container
         $g = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($d, array('always_use_default_target_path' => false, 'default_target_path' => '/', 'login_path' => '/login', 'target_path_parameter' => '_target_path', 'use_referer' => false));
         $g->setProviderKey('main');
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($a, array(0 => $this->get('security.user.provider.concrete.my_mongo_provider'), 1 => $this->get('fos_user.user_provider.username')), 'main', $b, $c), 2 => $f, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($a, $this->get('security.authentication.manager'), $this->get('security.authentication.session_strategy'), $d, 'main', $g, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $d, array('login_path' => '/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $b), array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $b, $c, $this->get('form.csrf_provider')), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($a, '51de8b91c8e5f', $b), 5 => $this->get('security.access_listener')), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($a, $this->get('security.authentication.trust_resolver'), $d, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $d, '/login', false), NULL, NULL, $b));
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => $this->get('security.channel_listener'), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($a, array(0 => $this->get('security.user.provider.concrete.my_mongo_provider'), 1 => $this->get('fos_user.user_provider.username')), 'main', $b, $c), 2 => $f, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($a, $this->get('security.authentication.manager'), $this->get('security.authentication.session_strategy'), $d, 'main', $g, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $d, array('login_path' => '/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $b), array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $b, $c, $this->get('form.csrf_provider')), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($a, '51e0c88ea4795', $b), 5 => $this->get('security.access_listener')), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($a, $this->get('security.authentication.trust_resolver'), $d, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $d, '/login', false), NULL, NULL, $b));
     }
 
     /**
@@ -2704,6 +2710,19 @@ class appDevDebugProjectContainer extends Container
     protected function getStudyBlogUser_PasswordResettingService()
     {
         return $this->services['study_blog_user.password_resetting'] = new \Study\BlogBundle\EventListener\PasswordResettingListener($this->get('router'));
+    }
+
+    /**
+     * Gets the 'study_user.registration.form.type' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Study\BlogBundle\Form\Type\RegistrationFormType A Study\BlogBundle\Form\Type\RegistrationFormType instance.
+     */
+    protected function getStudyUser_Registration_Form_TypeService()
+    {
+        return $this->services['study_user.registration.form.type'] = new \Study\BlogBundle\Form\Type\RegistrationFormType('Study\\BlogBundle\\Document\\Member');
     }
 
     /**
@@ -3416,6 +3435,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addPath('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\src\\Study\\BlogBundle/Resources/views', 'StudyBlog');
         $instance->addPath('D:/xampp/htdocs/symfony_project/symfony_mongodb/app/Resources/FOSUserBundle/views', 'FOSUser');
         $instance->addPath('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle/Resources/views', 'FOSUser');
+        $instance->addPath('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\src\\Study\\UserBundle/Resources/views', 'StudyUser');
         $instance->addPath('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\src\\Acme\\DemoBundle/Resources/views', 'AcmeDemo');
         $instance->addPath('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\vendor\\symfony\\symfony\\src\\Symfony\\Bundle\\WebProfilerBundle/Resources/views', 'WebProfiler');
         $instance->addPath('D:\\xampp\\htdocs\\symfony_project\\symfony_mongodb\\vendor\\sensio\\distribution-bundle\\Sensio\\Bundle\\DistributionBundle/Resources/views', 'SensioDistribution');
@@ -3727,7 +3747,6 @@ class appDevDebugProjectContainer extends Container
         $this->services['security.access_map'] = $instance = new \Symfony\Component\Security\Http\AccessMap();
 
         $instance->add(new \Symfony\Component\HttpFoundation\RequestMatcher('^/login'), array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
-        $instance->add(new \Symfony\Component\HttpFoundation\RequestMatcher('^/user'), array(0 => 'ROLE_ADMIN'), NULL);
         $instance->add(new \Symfony\Component\HttpFoundation\RequestMatcher('^/backend/post/add'), array(0 => 'ROLE_EDITOR'), NULL);
         $instance->add(new \Symfony\Component\HttpFoundation\RequestMatcher('^/backend/post/edit/*'), array(0 => 'ROLE_EDITOR'), NULL);
         $instance->add(new \Symfony\Component\HttpFoundation\RequestMatcher('^/admin'), array(0 => 'ROLE_ADMIN'), NULL);
@@ -3754,7 +3773,7 @@ class appDevDebugProjectContainer extends Container
         $a = $this->get('security.user_checker');
         $b = $this->get('security.encoder_factory');
 
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username'), $a, 'main', $b, true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51de8b91c8e5f'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.my_mongo_provider'), $a, 'backend', $b, true), 3 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'ThisTokenIsNotSoSecretChangeIt', 'backend'), 4 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51de8b91c8e5f')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username'), $a, 'main', $b, true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51e0c88ea4795'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.my_mongo_provider'), $a, 'backend', $b, true), 3 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'ThisTokenIsNotSoSecretChangeIt', 'backend'), 4 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('51e0c88ea4795')), true);
 
         $instance->setEventDispatcher($this->get('event_dispatcher'));
 
@@ -4002,6 +4021,7 @@ class appDevDebugProjectContainer extends Container
                 'DoctrineMongoDBBundle' => 'Doctrine\\Bundle\\MongoDBBundle\\DoctrineMongoDBBundle',
                 'StudyBlogBundle' => 'Study\\BlogBundle\\StudyBlogBundle',
                 'FOSUserBundle' => 'FOS\\UserBundle\\FOSUserBundle',
+                'StudyUserBundle' => 'Study\\UserBundle\\StudyUserBundle',
                 'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -4563,7 +4583,7 @@ class appDevDebugProjectContainer extends Container
                 'webmaster@example.com' => 'webmaster',
             ),
             'fos_user.registration.confirmation.enabled' => false,
-            'fos_user.registration.form.type' => 'fos_user_registration',
+            'fos_user.registration.form.type' => 'study_user_registration',
             'fos_user.registration.form.name' => 'fos_user_registration_form',
             'fos_user.registration.form.validation_groups' => array(
                 0 => 'Registration',

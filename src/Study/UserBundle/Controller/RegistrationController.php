@@ -5,12 +5,14 @@ namespace Study\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationController extends BaseController
 {
-	public function registerAction() {
+	public function registerAction(Request $request) 
+	{
 		$form = $this->container->get('fos_user.registration.form');
-		$formHandler = $this->container->get('fos_user.registration.form.handler');
+        $formHandler = $this->container->get('fos_user.registration.form.handler');
 		$confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
 		
 		$process = $formHandler->process($confirmationEnabled);
