@@ -1,0 +1,147 @@
+{# src/Study/BlogBundle/Resources/views/Email/resetting.email.html.twig #}
+
+{% block subject %}Resetting your password{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Hello {{ user.username }} !
+
+You can reset your email by accessing {{ confirmationUrl }}
+
+Greetings,
+the Acme team
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{#
+    You can of course render the html directly here.
+    Including a template as done here allows keeping things DRY by using
+    the template inheritance in it
+#}
+<h1>Username:</h1> {{ user.username }}
+<h2>confirmationUrl: </h2> <a href="{{ confirmationUrl }}"> Link Active </a>
+<div class="tab-content">
+				<div class="tab-pane active" id="report">
+					<table class="table table-bordered table-striped table-hover">
+						<thead>
+							<tr>
+								<th>User Id</th>
+								<th>User</th>
+								<th>Signup Date</th>
+								<th>City</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+							<tr>
+								<td>01</td>
+								<td>Tamerlan Soziev</td>
+								<td>FEB 2, 2013</td>
+								<td>Boras</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+{% endblock %}

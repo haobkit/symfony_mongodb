@@ -86,3 +86,13 @@ fos_user:
     registration:
       form:
         type: study_user_registration
+      confirmation:
+        enabled:    true
+    service:
+        mailer: fos_user.mailer.twig_swift
+    resetting:
+      email:
+            template: StudyBlogBundle:Email:resetting.email.html.twig
+            from_email:
+                address:        info@demo.com
+                sender_name:    Admin Demo Page

@@ -540,7 +540,7 @@
     <parameter key="fos_user.validator.unique.class">FOS\UserBundle\Validator\UniqueValidator</parameter>
     <parameter key="fos_user.security.interactive_login_listener.class">FOS\UserBundle\EventListener\LastLoginListener</parameter>
     <parameter key="fos_user.security.login_manager.class">FOS\UserBundle\Security\LoginManager</parameter>
-    <parameter key="fos_user.resetting.email.template">FOSUserBundle:Resetting:email.txt.twig</parameter>
+    <parameter key="fos_user.resetting.email.template">StudyBlogBundle:Email:resetting.email.html.twig</parameter>
     <parameter key="fos_user.registration.confirmation.template">FOSUserBundle:Registration:email.txt.twig</parameter>
     <parameter key="fos_user.storage">mongodb</parameter>
     <parameter key="fos_user.firewall_name">main</parameter>
@@ -556,7 +556,7 @@
     <parameter key="fos_user.registration.confirmation.from_email" type="collection">
       <parameter key="webmaster@example.com">webmaster</parameter>
     </parameter>
-    <parameter key="fos_user.registration.confirmation.enabled">false</parameter>
+    <parameter key="fos_user.registration.confirmation.enabled">true</parameter>
     <parameter key="fos_user.registration.form.type">study_user_registration</parameter>
     <parameter key="fos_user.registration.form.name">fos_user_registration_form</parameter>
     <parameter key="fos_user.registration.form.validation_groups" type="collection">
@@ -570,7 +570,7 @@
       <parameter>Default</parameter>
     </parameter>
     <parameter key="fos_user.resetting.email.from_email" type="collection">
-      <parameter key="webmaster@example.com">webmaster</parameter>
+      <parameter key="info@demo.com">Admin Demo Page</parameter>
     </parameter>
     <parameter key="fos_user.resetting.token_ttl">86400</parameter>
     <parameter key="fos_user.resetting.form.type">fos_user_resetting</parameter>
@@ -783,6 +783,10 @@
       <call method="addSubscriberService">
         <argument>fos_user.listener.flash</argument>
         <argument>FOS\UserBundle\EventListener\FlashListener</argument>
+      </call>
+      <call method="addSubscriberService">
+        <argument>fos_user.listener.email_confirmation</argument>
+        <argument>FOS\UserBundle\EventListener\EmailConfirmationListener</argument>
       </call>
       <call method="addSubscriberService">
         <argument>fos_user.listener.resetting</argument>
@@ -1698,7 +1702,7 @@
       <argument type="collection">
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider" public="false">
-            <argument type="service" id="fos_user.user_provider.username"/>
+            <argument type="service" id="fos_user.user_provider.username_email"/>
             <argument type="service" id="security.user_checker"/>
             <argument>main</argument>
             <argument type="service" id="security.encoder_factory"/>
@@ -1707,7 +1711,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>51e0c88ea4795</argument>
+            <argument>51e7cca90670b</argument>
           </service>
         </argument>
         <argument type="service">
@@ -1728,7 +1732,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>51e0c88ea4795</argument>
+            <argument>51e7cca90670b</argument>
           </service>
         </argument>
       </argument>
@@ -1937,7 +1941,7 @@
             <argument type="service" id="security.context"/>
             <argument type="collection">
               <argument type="service" id="security.user.provider.concrete.my_mongo_provider"/>
-              <argument type="service" id="fos_user.user_provider.username"/>
+              <argument type="service" id="fos_user.user_provider.username_email"/>
             </argument>
             <argument>main</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
@@ -2020,7 +2024,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>51e0c88ea4795</argument>
+            <argument>51e7cca90670b</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
           </service>
         </argument>
@@ -2054,7 +2058,7 @@
             <argument type="service" id="security.context"/>
             <argument type="collection">
               <argument type="service" id="security.user.provider.concrete.my_mongo_provider"/>
-              <argument type="service" id="fos_user.user_provider.username"/>
+              <argument type="service" id="fos_user.user_provider.username_email"/>
             </argument>
             <argument>backend</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
@@ -2203,7 +2207,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>51e0c88ea4795</argument>
+            <argument>51e7cca90670b</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
           </service>
         </argument>
@@ -2982,7 +2986,7 @@
       <argument type="service" id="security.authentication.session_strategy"/>
       <argument type="service" id="service_container"/>
     </service>
-    <service id="fos_user.user_provider.username" class="FOS\UserBundle\Security\UserProvider" public="false">
+    <service id="fos_user.user_provider.username_email" class="FOS\UserBundle\Security\EmailUserProvider" public="false">
       <argument type="service" id="fos_user.user_manager"/>
     </service>
     <service id="fos_user.util.user_manipulator" class="FOS\UserBundle\Util\UserManipulator">
@@ -3031,6 +3035,13 @@
     <service id="fos_user.registration.form.type" class="FOS\UserBundle\Form\Type\RegistrationFormType">
       <tag name="form.type" alias="fos_user_registration"/>
       <argument>Study\BlogBundle\Document\Member</argument>
+    </service>
+    <service id="fos_user.listener.email_confirmation" class="FOS\UserBundle\EventListener\EmailConfirmationListener">
+      <tag name="kernel.event_subscriber"/>
+      <argument type="service" id="fos_user.mailer"/>
+      <argument type="service" id="fos_user.util.token_generator"/>
+      <argument type="service" id="router"/>
+      <argument type="service" id="session"/>
     </service>
     <service id="fos_user.change_password.form.factory" class="FOS\UserBundle\Form\Factory\FormFactory">
       <argument type="service" id="form.factory"/>
@@ -3526,19 +3537,21 @@
         </argument>
       </call>
     </service>
-    <service id="fos_user.mailer" class="FOS\UserBundle\Mailer\Mailer">
+    <service id="fos_user.mailer" class="FOS\UserBundle\Mailer\TwigSwiftMailer">
       <argument type="service" id="mailer"/>
       <argument type="service" id="router"/>
-      <argument type="service" id="templating"/>
+      <argument type="service" id="twig"/>
       <argument type="collection">
-        <argument key="confirmation.template">FOSUserBundle:Registration:email.txt.twig</argument>
-        <argument key="resetting.template">FOSUserBundle:Resetting:email.txt.twig</argument>
+        <argument key="template" type="collection">
+          <argument key="confirmation">FOSUserBundle:Registration:email.txt.twig</argument>
+          <argument key="resetting">StudyBlogBundle:Email:resetting.email.html.twig</argument>
+        </argument>
         <argument key="from_email" type="collection">
           <argument key="confirmation" type="collection">
             <argument key="webmaster@example.com">webmaster</argument>
           </argument>
           <argument key="resetting" type="collection">
-            <argument key="webmaster@example.com">webmaster</argument>
+            <argument key="info@demo.com">Admin Demo Page</argument>
           </argument>
         </argument>
       </argument>
