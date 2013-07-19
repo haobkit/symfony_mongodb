@@ -12,6 +12,7 @@ class RegistrationFormType extends BaseType
 		parent::buildForm($builder, $options);
 		
 		$builder->add('name');
+		$builder->add('invitation', 'study_invitation_type');
 	}
 	
 	public function getName() 

@@ -49,14 +49,14 @@ study_home_user:
     defaults: { _controller: StudyBlogBundle:User:index }
 
 study_login:
-    pattern:   /login
+    pattern:   /backend/login
     defaults:  { _controller: StudyBlogBundle:Security:login }
     
 study_login_check:
-    pattern:   /login_check
+    pattern:   /backend/login_check
     
 study_logout:
-    path:   /logout
+    path:   /backend/logout
     
 study_add_comment:
     pattern:  /post/{idPost}/comment/add

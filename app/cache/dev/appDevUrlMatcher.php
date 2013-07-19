@@ -444,22 +444,22 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        if (0 === strpos($pathinfo, '/log')) {
-            if (0 === strpos($pathinfo, '/login')) {
+        if (0 === strpos($pathinfo, '/backend/log')) {
+            if (0 === strpos($pathinfo, '/backend/login')) {
                 // study_login
-                if ($pathinfo === '/login') {
+                if ($pathinfo === '/backend/login') {
                     return array (  '_controller' => 'Study\\BlogBundle\\Controller\\SecurityController::loginAction',  '_route' => 'study_login',);
                 }
 
                 // study_login_check
-                if ($pathinfo === '/login_check') {
+                if ($pathinfo === '/backend/login_check') {
                     return array('_route' => 'study_login_check');
                 }
 
             }
 
             // study_logout
-            if ($pathinfo === '/logout') {
+            if ($pathinfo === '/backend/logout') {
                 return array('_route' => 'study_logout');
             }
 

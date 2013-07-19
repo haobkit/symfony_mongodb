@@ -15,35 +15,27 @@ security:
             id: fos_user.user_provider.username_email
 
     firewalls:
+        backend:
+            pattern: ^/backend/*
+            provider: my_mongo_provider
+            form_login:
+                login_path: /backend/login
+                check_path: /backend/login_check
+            logout:
+                path:   /backend/logout
+                target: /
+            anonymous: true
         main:
-            pattern: ^/
+            pattern: ^/*
             form_login:
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider
             logout:       true
             anonymous:    true
-            
-        backend:
-            pattern: ^/admin/*
-            provider: my_mongo_provider
-            form_login:
-                check_path: /login_check
-                login_path: /login
-                default_target_path: /post
-            logout:
-                path:   /logout
-                target: /post
-                invalidate_session: false
-            anonymous:    true
-            remember_me:
-                key:      "%secret%"
-                lifetime: 3600
-                path:     /
-                domain:   ~
-                remember_me_parameter: _remember_me
 
     access_control:
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/backend/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/user, role: ROLE_ADMIN }
         - { path: ^/backend/post/add, roles: ROLE_EDITOR }
         - { path: ^/backend/post/edit/*, roles: ROLE_EDITOR }

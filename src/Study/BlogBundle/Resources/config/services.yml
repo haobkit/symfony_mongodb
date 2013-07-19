@@ -11,9 +11,24 @@ services:
       tags:
         - { name: kernel.event_subscriber }
     
-    study_user.registration.form.type:
-      class: Study\BlogBundle\Form\Type\RegistrationFormType
-      arguments: [%fos_user.model.user.class%]
-      tags:
-        - { name: form.type, alias: study_user_registration }
+    #study_user.registration.form.type:
+      #class: Study\BlogBundle\Form\Type\RegistrationFormType
+      #arguments: [%fos_user.model.user.class%]
+      #tags:
+        #- { name: form.type, alias: study_user_registration }
+   
+    study.registration.form.type:
+        class: Study\BlogBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags: [{ name: "form.type", alias: "study_user_registration" }]
+
+    study.invitation.form.type:
+        class: Study\BlogBundle\Form\Type\InvitationFormType
+        arguments: ["@study.invitation.form.data_transformer"]
+        tags: [{ name: "form.type", alias: "study_invitation_type" }]
+
+    study.invitation.form.data_transformer:
+        class: Study\BlogBundle\Form\DataTransformer\InvitationToCodeTransformer
+        arguments: ["@doctrine.odm.mongodb.document_manager"]
+
       

@@ -4,6 +4,7 @@ namespace Study\BlogBundle\Document;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @MongoDB\Document
@@ -23,5 +24,42 @@ class Member extends BaseUser {
 	 * @MongoDB\Field(type="string")
 	 */
 	protected $name;
-}
 
+    /**
+     * Get id
+     *
+     * @return id $id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return self
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+	
+	/**
+	 *@MongoDB\ReferenceOne(targetDocument="Invitation", inversedBy="user")
+	 * @Assert\NotNull(message="Your invitation is wrong")
+	 */
+	protected $invitation;
+}
